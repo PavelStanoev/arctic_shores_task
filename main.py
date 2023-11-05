@@ -32,7 +32,7 @@ def total_time_spent(df: pd.DataFrame, timestamp_col: str) -> float:
     """
     Calculates the total time in seconds between the first and last entries in the timestamp column.
 
-    :param df: Dataframe containing timestamp_col
+    :param df: Dataframe
     :param timestamp_col: string name of the column that contains timestamp info
     :return: float representation of the time between first and last timestamps
     """
@@ -40,4 +40,56 @@ def total_time_spent(df: pd.DataFrame, timestamp_col: str) -> float:
     total_seconds = total_time.total_seconds()
 
     return total_seconds
+
+
+def mean_points_all_rounds(df: pd.DataFrame, event_col: str) -> float:
+    """
+    Calculates the mean of green cards across all cards
+    :param df: Dataframe
+    :param event_col: string representation of the Dataframe column containing events
+    :return: mean of green cards across all cards as float
+    """
+
+    round_number = 0
+    green_cards_per_round = {}
+
+    events = df[event_col].tolist()
+
+    for i in range(len(events)):
+        if events[i] == 'shuffle_cards':
+            round_number += 1
+        elif events[i] == 'green_card':
+            green_cards_per_round.setdefault(round_number, 0)
+            green_cards_per_round[round_number] += 1
+        elif events[i] in ['red_card', 'banked']:
+            continue
+
+    return sum(green_cards_per_round.values()) / len(green_cards_per_round) if green_cards_per_round else 0
+
+
+def total_points_all_rounds(df: pd.DataFrame, event_col: str) -> int:
+    """
+    Calculates the total number of points received
+
+    :param df: Dataframe
+    :param event_col: string representation of the Dataframe column containing events
+    :return: total points as integer
+    """
+    total_points = 0
+    unsafe_points = 0
+
+    events = df[event_col].tolist()
+
+    for event in events:
+        if event == 'green_card':
+            unsafe_points += 1
+        elif event == 'banked':
+            total_points += unsafe_points
+            unsafe_points = 0
+        elif event == 'red_card':
+            unsafe_points = 0
+
+    total_points += unsafe_points
+
+    return total_points
 
