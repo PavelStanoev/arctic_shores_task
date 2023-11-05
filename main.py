@@ -106,3 +106,23 @@ def total_points_all_rounds(df: pd.DataFrame, event_col: str) -> int:
     total_points += unsafe_points
 
     return total_points
+
+
+def export_to_csv(input_file_path: str, output_file_path: str):
+    """
+    Exports CourageCards results to a CSV file.
+
+    :param input_file_path: The file path with the input data
+    :param output_file_path: The file path where the CSV will be saved.
+    """
+    data = parse_courage_cards_json(input_file_path)
+
+    results_df = pd.DataFrame({
+        'Total Time (seconds)': [total_time_spent(data,'timestamp')],
+        'Mean Green Cards': [mean_points_all_rounds(data, 'event')],
+        'Total Points': [total_points_all_rounds(data, 'event')]
+    })
+
+    results_df.to_csv(output_file_path, index=False)
+
+
