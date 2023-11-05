@@ -7,8 +7,8 @@ with open("test_level_data.json", "r") as f:
     data = json.load(f)
 
 # crate two dataframes
-event_df = pd.DataFrame(list(data['event'].items()), columns=['event_id', 'event'])
-created_df = pd.DataFrame(list(data['created'].items()), columns=['event_id', 'timestamp'])
+event_df = pd.DataFrame(data['event'].items(), columns=['event_id', 'event'])
+created_df = pd.DataFrame(data['created'].items(), columns=['event_id', 'timestamp'])
 
 event_df['event_id'] = event_df['event_id'].astype(int)
 created_df['event_id'] = created_df['event_id'].astype(int)
@@ -16,6 +16,7 @@ created_df['event_id'] = created_df['event_id'].astype(int)
 df = pd.merge(event_df, created_df, on='event_id')
 
 print(df.head(5))
+
 
 # check for missing values
 missing_timestamps = df['timestamp'].isnull().sum()
