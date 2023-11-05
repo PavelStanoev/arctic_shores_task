@@ -36,6 +36,11 @@ def total_time_spent(df: pd.DataFrame, timestamp_col: str) -> float:
     :param timestamp_col: string name of the column that contains timestamp info
     :return: float representation of the time between first and last timestamps
     """
+    if df.empty:
+        raise ValueError("The DataFrame is empty.")
+    if timestamp_col not in df.columns:
+        raise ValueError(f"Column '{timestamp_col}' does not exist in the DataFrame.")
+
     total_time = df[timestamp_col].iloc[-1] - df[timestamp_col].iloc[0]
     total_seconds = total_time.total_seconds()
 
@@ -49,6 +54,10 @@ def mean_points_all_rounds(df: pd.DataFrame, event_col: str) -> float:
     :param event_col: string representation of the Dataframe column containing events
     :return: mean of green cards across all cards as float
     """
+    if df.empty:
+        raise ValueError("The DataFrame is empty.")
+    if event_col not in df.columns:
+        raise ValueError(f"Column '{event_col}' does not exist in the DataFrame.")
 
     round_number = 0
     green_cards_per_round = {}
@@ -75,6 +84,11 @@ def total_points_all_rounds(df: pd.DataFrame, event_col: str) -> int:
     :param event_col: string representation of the Dataframe column containing events
     :return: total points as integer
     """
+    if df.empty:
+        raise ValueError("The DataFrame is empty.")
+    if event_col not in df.columns:
+        raise ValueError(f"Column '{event_col}' does not exist in the DataFrame.")
+
     total_points = 0
     unsafe_points = 0
 
@@ -92,4 +106,3 @@ def total_points_all_rounds(df: pd.DataFrame, event_col: str) -> int:
     total_points += unsafe_points
 
     return total_points
-
