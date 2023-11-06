@@ -72,8 +72,6 @@ def mean_points_all_rounds(df: pd.DataFrame, event_col: str) -> float:
         elif events[i] in ['red_card', 'banked']:
             continue
 
-    print(green_cards_per_round)  # Add this line for debugging
-
 
     return sum(green_cards_per_round.values()) / len(green_cards_per_round) if green_cards_per_round else 0
 
